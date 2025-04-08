@@ -1,0 +1,27 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import 'react-quill/dist/quill.snow.css'; // Add this line to apply the default Quill theme
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { RouterProvider } from 'react-router-dom';
+import router from './routes';
+import { Provider } from 'react-redux';
+import { store, persistor } from './store/store'; // Import persistor
+import { PersistGate } from 'redux-persist/integration/react'; // Import PersistGate
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+
+root.render(
+  // <React.StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}> {/* Persist state while rehydrating */}
+        <RouterProvider router={router} />
+      </PersistGate>
+    </Provider>
+  // </React.StrictMode>
+);
+
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
+reportWebVitals();
