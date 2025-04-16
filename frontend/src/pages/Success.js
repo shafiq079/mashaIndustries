@@ -21,7 +21,7 @@ const Success = () => {
       </p>
 
       <Link
-        to="/orders"
+        to="/order"
         className="px-6 py-3 border-2 border-green-600 rounded-md font-semibold text-green-600 hover:bg-green-600 hover:text-white transition duration-300"
       >
         Go to Order Page

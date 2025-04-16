@@ -12,6 +12,7 @@ import VerifyEmail from '../pages/VerifyEmail';
 import AdminPanel from '../pages/AdminPanel';
 import AllUsers from '../pages/AllUsers';
 import AllProducts from '../pages/AllProducts';
+import AllOrders from '../pages/AllOrders';
 import CategoryProduct from '../pages/CategoryProduct';
 import ProductDetails from '../pages/ProductDetails';
 import Cart from '../pages/Cart';
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
         children: [
           { path: 'all-users', element: <AllUsers /> },
           { path: 'all-products', element: <AllProducts /> },
+          {path:'all-orders',element: <AllOrders />},
         ],
       },
     ],

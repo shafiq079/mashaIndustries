@@ -4,7 +4,8 @@ import Logo from './masha_industries';
 const Footer = () => {
   return (
     <footer className="bg-gray-100 text-gray-600 py-10">
-      <div className="container mx-auto px-5">
+      <div className='bg-slate-600 w-full h-[1px]'></div>
+      <div className="container mx-auto p-5">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}

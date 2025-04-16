@@ -1,5 +1,5 @@
 // const backendDomin = "https://backend-beige-xi-24.vercel.app"
-const backendDomin = "https://mashaindustries.onrender.com"
+const backendDomin = "http://localhost:8080"
 const SummaryApi = {
     signUP : {
         url : `${backendDomin}/api/signup`,
@@ -95,7 +95,11 @@ const SummaryApi = {
         url: `${backendDomin}/api/checkout`,
         method : 'post'
     },
-    getOrder:{
+    getOrder : {
+        url: `${backendDomin}/api/order`,
+        method : 'get'
+    },
+    allOrder:{
         url: `${backendDomin}/api/order-list`,
         method: 'get'
     }

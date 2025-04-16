@@ -12,6 +12,7 @@ const OrderPage = () => {
       credentials: 'include'
     })
     const responseData = await response.json()
+    console.log("Order Fetch Response:", responseData)
     setData(responseData.data)
   }
 

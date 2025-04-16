@@ -50,6 +50,8 @@ function App() {
 
   // Check if the current route is under /admin-panel
   const isAdminPanel = location.pathname.startsWith('/admin-panel');
+  const isLoginPage = location.pathname.startsWith('/login');
+  const isRegisterPage = location.pathname.startsWith('/signup');
 
   return (
     <>
@@ -65,7 +67,7 @@ function App() {
         <main className="min-h-[calc(100vh-120px)] pt-16">
           <Outlet />
         </main>
-        {!isAdminPanel && <Footer />} {/* Footer only renders if not in admin panel */}
+        {!isAdminPanel && !isLoginPage && !isRegisterPage && <Footer />}
       </Context.Provider>
     </>
   );

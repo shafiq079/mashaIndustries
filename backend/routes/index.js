@@ -32,7 +32,8 @@ const { aiupload, uploadAiImage }=require('../controller/aicontroler/aicontroler
 const { tryOnImage } = require('../controller/tryon/tryOnController');
 const tryonUpload = multer({ dest: 'uploads/tryon' });
 
-const customupload=require('../controller/custom/customcont')
+const customupload=require('../controller/custom/customcont');
+const getAllOrderController = require('../controller/order/allOrderController');
 
 // User routes
 router.post("/signup", userSignUpController);
@@ -43,6 +44,7 @@ router.get("/userLogout", userLogout);
 // Admin panel routes
 router.get("/all-user", authToken, allUsers);
 router.post("/update-user", authToken, updateUser);
+router.get("/order-list", authToken, getAllOrderController);
 
 // Product routes
 router.post("/upload-product", authToken, UploadProductController);
@@ -67,7 +69,7 @@ router.get("/verify-email", verifyEmailController);
 // payment and order
 router.post('/checkout',authToken, paymentController)
 router.post('/webhook',webhooks)
-router.get('/order-list',authToken, orderController)
+router.get('/order',authToken, orderController)
 
 // Custom Order Uploads
 router.post("/custom",authToken, midleupload.array('files', 10), customupload.uploadfile);

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import ReactQuill from 'react-quill';
 import UploadProduct from '../components/UploadProduct'
 import SummaryApi from '../common'
 import AdminProductCard from '../components/AdminProductCard'
@@ -11,9 +10,6 @@ const AllProducts = () => {
   const fetchAllProduct = async () => {
     const response = await fetch(SummaryApi.allProduct.url)
     const dataResponse = await response.json()
-
-    console.log("product data", dataResponse)
-
     setAllProduct(dataResponse?.data || [])
   }
 
