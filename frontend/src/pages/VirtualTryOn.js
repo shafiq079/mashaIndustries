@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import uploadImage from "../helpers/uploadImage"; // Import your Cloudinary helper function
+import uploadImage from "../helpers/uploadImage";
 
 const VirtualTryOn = () => {
   const [personImageFile, setPersonImageFile] = useState(null);
@@ -14,20 +14,13 @@ const VirtualTryOn = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Upload person image to Cloudinary
       const personImageResponse = await uploadImage(personImageFile);
-      const personImageUrl = personImageResponse.url;
-
-      // Upload garment image to Cloudinary
       const garmentImageResponse = await uploadImage(garmentImageFile);
-      const garmentImageUrl = garmentImageResponse.url;
 
-      // Send the Cloudinary URLs to the backend
       const response = await axios.post("http://localhost:8080/api/try-on", {
-        person_image_url: personImageUrl,
-        garment_image_url: garmentImageUrl,
+        person_image_url: personImageResponse.url,
+        garment_image_url: garmentImageResponse.url,
       });
-      console.log("Image URLs",personImageUrl, garmentImageUrl);
 
       setResultImageUrl(response.data.result_url);
     } catch (error) {
@@ -39,84 +32,87 @@ const VirtualTryOn = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-2xl font-bold mb-4 text-center">Virtual Try-On</h1>
-      <form onSubmit={handleTryOn} className="space-y-6 flex flex-col items-center">
-        
-        {/* Upload Inputs and Previews (Side by Side) */}
-        <div className="flex flex-wrap justify-center gap-8">
-          {/* Person Image Section */}
-          <div className="flex flex-col items-center">
-            <label className="block font-semibold mb-2">Upload Person Image:</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                setPersonImageFile(e.target.files[0]);
-                setPersonImagePreview(URL.createObjectURL(e.target.files[0]));
-              }}
-              className="border p-2 w-64"
-              required
-            />
-            {personImagePreview && (
-              <div className="mt-3">
-                <img
-                  src={personImagePreview}
-                  alt="Person Preview"
-                  className="w-64 h-64 object-contain rounded border"
+    <div className="p-6">
+      <h1 className="text-3xl font-bold text-center mb-6">Virtual Try-On</h1>
+
+      <form onSubmit={handleTryOn} className="space-y-6">
+        {/* Two Main Sections */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Half - Uploads */}
+          <div className="w-full lg:w-1/2 flex flex-col gap-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              {/* Person Upload */}
+              <div className="flex-1 bg-gray-100 p-4 rounded-lg shadow text-center">
+                <label className="font-semibold mb-2 block">Upload Person Image:</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    setPersonImageFile(e.target.files[0]);
+                    setPersonImagePreview(URL.createObjectURL(e.target.files[0]));
+                  }}
+                  className="border p-2 w-full max-w-xs mx-auto"
+                  required
                 />
+                {personImagePreview && (
+                  <img
+                    src={personImagePreview}
+                    alt="Person Preview"
+                    className="mt-4 mx-auto w-48 h-48 object-cover border rounded"
+                  />
+                )}
               </div>
-            )}
+
+              {/* Garment Upload */}
+              <div className="flex-1 bg-gray-100 p-4 rounded-lg shadow text-center">
+                <label className="font-semibold mb-2 block">Upload Garment Image:</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    setGarmentImageFile(e.target.files[0]);
+                    setGarmentImagePreview(URL.createObjectURL(e.target.files[0]));
+                  }}
+                  className="border p-2 w-full max-w-xs mx-auto"
+                  required
+                />
+                {garmentImagePreview && (
+                  <img
+                    src={garmentImagePreview}
+                    alt="Garment Preview"
+                    className="mt-4 mx-auto w-48 h-48 object-cover border rounded"
+                  />
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Garment Image Section */}
-          <div className="flex flex-col items-center">
-            <label className="block font-semibold mb-2">Upload Garment Image:</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                setGarmentImageFile(e.target.files[0]);
-                setGarmentImagePreview(URL.createObjectURL(e.target.files[0]));
-              }}
-              className="border p-2 w-64"
-              required
-            />
-            {garmentImagePreview && (
-              <div className="mt-3">
-                <img
-                  src={garmentImagePreview}
-                  alt="Garment Preview"
-                  className="w-64 h-64 object-contain rounded border"
-                />
-              </div>
+          {/* Right Half - Result */}
+          <div className="w-full lg:w-1/2 bg-gray-50 p-6 rounded-lg shadow flex flex-col items-center justify-center">
+            <h2 className="text-xl font-semibold mb-4">Result:</h2>
+            {resultImageUrl ? (
+              <img
+                src={resultImageUrl}
+                alt="Try-On Result"
+                className="w-72 h-72 object-contain border rounded"
+              />
+            ) : (
+              <p className="text-gray-500">Result will appear here after try-on.</p>
             )}
           </div>
         </div>
 
         {/* Try-On Button */}
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-6 py-2 rounded-lg mt-4 hover:bg-blue-600"
-          disabled={loading}
-        >
-          {loading ? "Trying On..." : "Try On"}
-        </button>
-      </form>
-
-      {/* Result Image */}
-      {resultImageUrl && (
-        <div className="mt-8 flex justify-center">
-          <div className="text-center">
-            <h2 className="text-xl font-semibold mb-2">Result:</h2>
-            <img
-              src={resultImageUrl}
-              alt="Virtual Try-On Result"
-              className="w-96 h-96 object-contain rounded border"
-            />
-          </div>
+        <div className="text-center">
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? "Trying On..." : "Try On"}
+          </button>
         </div>
-      )}
+      </form>
     </div>
   );
 };
