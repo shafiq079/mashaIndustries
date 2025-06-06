@@ -1,13 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import 'react-quill/dist/quill.snow.css'; // Add this line to apply the default Quill theme
+import 'react-quill/dist/quill.snow.css'; 
 import './index.css';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes';
 import { Provider } from 'react-redux';
-import { store, persistor } from './store/store'; // Import persistor
-import { PersistGate } from 'redux-persist/integration/react'; // Import PersistGate
+import { store, persistor } from './store/store';
+import { PersistGate } from 'redux-persist/integration/react'; 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
