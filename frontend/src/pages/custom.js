@@ -98,7 +98,6 @@ function Custom() {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      console.log("Files uploaded successfully:", response.data);
       alert("Files uploaded successfully!");
       setImages([]);
       setImagePreviews([]);

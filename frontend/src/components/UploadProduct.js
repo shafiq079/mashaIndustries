@@ -214,7 +214,6 @@ const UploadProduct = ({ onClose, fetchData }) => {
           />
 
           <label htmlFor='description' className='mt-3'>Description :</label>
-          <label htmlFor="description" className="mt-3">Description :</label>
   <div className="relative">
     <ReactQuill
       value={data.description}

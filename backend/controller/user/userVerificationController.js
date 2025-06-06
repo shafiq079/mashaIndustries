@@ -5,7 +5,6 @@ require('dotenv').config();
 const verifyEmailController = async (req, res) => {
     try {
         const token  = req.query.token;
-        console.log("userVerification token", token)
         if (!token) {
             return res.status(400).json({
                 success: false,

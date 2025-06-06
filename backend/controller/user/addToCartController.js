@@ -11,8 +11,6 @@ const addToCartController = async (req, res) => {
             userId: currentUser // Check if the product is already in the user's cart
         });
 
-        console.log("isProductAvailable", isProductAvailable);
-
         if (isProductAvailable) {
             return res.json({
                 message: "Product already exists in your cart",

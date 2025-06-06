@@ -52,7 +52,6 @@ const Cart = () => {
         if(responseData?.id){
             StripePromise.redirectToCheckout({ sessionId : responseData.id})
         }
-        console.log("Payment Response : ", responseData)
     }
     useEffect(() => {
         setLoading(true)

@@ -12,7 +12,6 @@ const VerifyEmail = () => {
     const verifyEmail = async () => {
       const urlParams = new URLSearchParams(location.search);
       const token = urlParams.get('token');
-      console.log("User-verification token:", token);
 
       if (!token) {
         setMessage('Verification token is missing.');

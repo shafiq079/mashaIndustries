@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import 'react-quill/dist/quill.snow.css'; // Add this line to apply the default Quill theme
 import { Outlet, useLocation } from 'react-router-dom'; // Added useLocation
@@ -51,7 +50,7 @@ function App() {
   // Check if the current route is under /admin-panel
   const isAdminPanel = location.pathname.startsWith('/admin-panel');
   const isLoginPage = location.pathname.startsWith('/login');
-  const isRegisterPage = location.pathname.startsWith('/signup');
+  const isRegisterPage = location.pathname.startsWith('/sign-up');
 
   return (
     <>

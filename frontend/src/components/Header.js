@@ -122,12 +122,32 @@ const Header = () => {
               </button>
               {hoveredMenu === 'orders' && (
                 <div className="absolute bg-white font-normal shadow-md rounded mt-2 z-50">
-                  <Link to="/order" className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                  <button
+                    onClick={() => {
+                      if (user?._id) {
+                        navigate('/order');
+                      } else {
+                        toast.error('Please login!');
+                      }
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-left w-full"
+                  >
                     See Orders
-                  </Link>
-                  <Link to="/custom" className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (user?._id) {
+                        navigate('/custom');
+                      } else {
+                        toast.error('Please login!');
+                      }
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-left w-full"
+                  >
                     Custom Order
-                  </Link>
+                  </button>
+
                 </div>
               )}
             </div>
@@ -142,12 +162,30 @@ const Header = () => {
               </button>
               {hoveredMenu === 'ai' && (
                 <div className="absolute bg-white font-normal shadow-md rounded mt-2 z-50">
-                  <Link to="/ai" className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                  <button
+                    onClick={() => {
+                      if (user?._id) {
+                        navigate('/ai');
+                      } else {
+                        toast.error('Please login!');
+                      }
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-left w-full"
+                  >
                     AI Image Gen
-                  </Link>
-                  <Link to="/virtual-try-on" className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (user?._id) {
+                        navigate('/virtual-try-on');
+                      } else {
+                        toast.error('Please login!');
+                      }
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
+                  >
                     Virtual Try-On
-                  </Link>
+                  </button>
                 </div>
               )}
             </div>

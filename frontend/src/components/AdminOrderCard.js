@@ -4,7 +4,6 @@ import displayINRCurrency from '../helpers/displayCurrency';
 
 const AdminOrderCard = ({ order, index }) => {
   const [viewOrder, setViewOrder] = useState(false);
-  console.log("Order Details in admin panel:", order);
 
   const getPaymentStatusBadge = (status) => {
     const baseClass = "px-2 py-1 rounded text-white text-xs";
