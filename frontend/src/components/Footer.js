@@ -18,7 +18,6 @@ const Footer = () => {
               Your one-stop shop for innovative products and exceptional service.
             </p>
           </div>
-
           {/* Company Links */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Company</h3>
@@ -45,7 +44,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
           {/* Customer Service Links */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Service</h3>
@@ -72,7 +70,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
           {/* Newsletter & Social */}
           <div>
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Stay Connected</h3>
@@ -166,15 +163,22 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
         {/* Bottom Section */}
         <div className="border-t border-gray-200 pt-6 flex flex-col sm:flex-row justify-between items-center text-sm text-gray-500">
           <p>
             © 2025 MashaIndustries. All Rights Reserved.
           </p>
-          <div className="mt-4 sm:mt-0 flex gap-6">
+          <div className="mt-4 sm:mt-0 flex flex-wrap justify-center gap-6">
             <a href="/privacy" className="hover:text-red-600 transition-colors">Privacy Policy</a>
             <a href="/terms" className="hover:text-red-600 transition-colors">Terms & Conditions</a>
+            <a 
+              href="https://shafiq-webdev.vercel.app/" 
+              className="hover:text-red-600 transition-colors"
+              target="_blank" 
+              rel="noopener noreferrer"
+            >
+              Developed by Shafiq
+            </a>
           </div>
         </div>
       </div>
