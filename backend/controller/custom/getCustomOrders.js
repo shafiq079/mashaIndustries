@@ -1,8 +1,8 @@
-const customOrderModel = require('../../models/customsch');
+const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 const getCustomOrders = async (req, res) => {
     try {
-        const allOrders = await customOrderModel.find().sort({ createdAt: -1 }); // Sort by newest first
+        const allOrders = await CustomOrderRequestModel.find().sort({ createdAt: -1 }); // Sort by newest first
         res.json({
             message: "All Custom Orders",
             data: allOrders,

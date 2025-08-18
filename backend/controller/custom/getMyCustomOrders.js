@@ -1,9 +1,9 @@
-const customOrderModel = require('../../models/customsch');
+const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 const getMyCustomOrders = async (req, res) => {
     try {
         const currentUserId = req.userId;
-        const userOrders = await customOrderModel.find({ userId: currentUserId }).sort({ createdAt: -1 });
+        const userOrders = await CustomOrderRequestModel.find({ userId: currentUserId }).sort({ createdAt: -1 });
 
         res.json({
             message: "User's Custom Orders",

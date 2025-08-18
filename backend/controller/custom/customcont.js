@@ -1,15 +1,15 @@
-const File = require('../../models/customsch');
+const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 exports.uploadfile = async (req, res) => {
   try {
-    const { amount, productType, productSize, material, imageUrl, originalName } = req.body;
+    const { amount, productType, productSize, material, imageUrl, originalName, description, budget } = req.body;
     const userId = req.userId;
 
     if (!imageUrl) {
       return res.status(400).json({ message: 'Image URL is required.' });
     }
 
-    const newCustomOrder = new File({
+    const newCustomOrder = new CustomOrderRequestModel({
       originalName: originalName,
       filePath: imageUrl,
       quantity: amount,
@@ -17,6 +17,8 @@ exports.uploadfile = async (req, res) => {
       material: material,
       productsize: productSize,
       userId: userId,
+      description: description, // New field
+      budget: budget, // New field
     });
 
     await newCustomOrder.save();

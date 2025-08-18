@@ -1,4 +1,4 @@
-const customOrderModel = require('../../models/customsch');
+const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 const reviewCustomOrder = async (req, res) => {
     try {
@@ -17,7 +17,7 @@ const reviewCustomOrder = async (req, res) => {
             adminPrice: status === 'approved' ? adminPrice : undefined
         };
 
-        const updatedOrder = await customOrderModel.findByIdAndUpdate(orderId, updateData, { new: true });
+        const updatedOrder = await CustomOrderRequestModel.findByIdAndUpdate(orderId, updateData, { new: true });
 
         if (!updatedOrder) {
             throw new Error("Order not found.");

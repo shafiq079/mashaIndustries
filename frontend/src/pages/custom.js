@@ -11,6 +11,8 @@ function Custom() {
   const [productType, setProductType] = useState("");
   const [productSize, setSize] = useState("");
   const [material, setMaterial] = useState("");
+  const [description, setDescription] = useState(""); // New state
+  const [budget, setBudget] = useState(""); // New state
   const [message, setMessage] = useState("");
   const fileInputRef = useRef(null);
 
@@ -78,6 +80,8 @@ function Custom() {
         productType: productType,
         productSize: productSize,
         material: material,
+        description: description, // New field
+        budget: budget, // New field
         imageUrl: uploadResponse.secure_url,
         originalName: images[0].name
       };
@@ -95,6 +99,8 @@ function Custom() {
         setProductType("");
         setSize("");
         setMaterial("");
+        setDescription(""); // Clear new field
+        setBudget(""); // Clear new field
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         toast.error(response.data.message || "An unknown error occurred.");
@@ -168,6 +174,22 @@ function Custom() {
             className="mb-4 block w-full md:w-1/2 p-2 border border-gray-300 rounded-lg"
           />
         </div>
+        {/* New fields */}
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Describe your custom design (e.g., specific details, placement, colors)"
+          rows="4"
+          className="mb-4 block w-full p-2 border border-gray-300 rounded-lg"
+        ></textarea>
+        <input
+          type="number"
+          value={budget}
+          onChange={(e) => setBudget(e.target.value)}
+          placeholder="Your Budget (e.g., $50)"
+          min="0"
+          className="mb-4 block w-full p-2 border border-gray-300 rounded-lg"
+        />
         <button
           onClick={handleSubmit}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"

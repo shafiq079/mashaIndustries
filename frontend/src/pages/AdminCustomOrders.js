@@ -95,7 +95,9 @@ const OrderCard = ({ order, onReview }) => {
                         <li>Size: {order.productsize}</li>
                         <li>Material: {order.material}</li>
                         <li>Quantity: {order.quantity}</li>
-                        <li>User Price Estimate: ${order.totalPrice}</li>
+                        {order.description && <li>Description: {order.description}</li>}
+                        {order.budget && <li>User Budget: ${order.budget}</li>}
+                        {order.totalPrice && <li>User Price Estimate: ${order.totalPrice}</li>}
                         {order.adminPrice && <li>Admin Price: ${order.adminPrice}</li>}
                     </ul>
                 </div>

@@ -8,6 +8,8 @@ const fileSchema = new mongoose.Schema({
   productsize: { type: String, required: true },
   material: { type: String, required: true },
   userId: { type: String, required: true },
+  description: { type: String }, // New field
+  budget: { type: Number }, // New field
   totalPrice: { type: Number }, // This is the user-calculated price, can be optional
   status: {
     type: String,
@@ -21,5 +23,5 @@ const fileSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const File = mongoose.model('File', fileSchema);
-module.exports = File;
+const CustomOrderRequestModel = mongoose.model('CustomOrderRequest', fileSchema);
+module.exports = CustomOrderRequestModel;

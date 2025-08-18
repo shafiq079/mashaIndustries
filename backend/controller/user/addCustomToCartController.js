@@ -1,4 +1,4 @@
-const customOrderModel = require('../../models/customsch');
+const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 const cartModel = require('../../models/cartProduct');
 
 const addCustomToCartController = async (req, res) => {
@@ -10,7 +10,7 @@ const addCustomToCartController = async (req, res) => {
             throw new Error("Custom Order ID is required.");
         }
 
-        const customOrder = await customOrderModel.findOne({ _id: customOrderId, userId: currentUserId });
+        const customOrder = await CustomOrderRequestModel.findOne({ _id: customOrderId, userId: currentUserId });
 
         if (!customOrder) {
             throw new Error("Custom order not found or you do not have permission to add it.");

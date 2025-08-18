@@ -81,6 +81,8 @@ const OrderCard = ({ order }) => {
                         <li>Size: {order.productsize}</li>
                         <li>Material: {order.material}</li>
                         <li>Quantity: {order.quantity}</li>
+                        {order.description && <li>Description: {order.description}</li>}
+                        {order.budget && <li>User Budget: ${order.budget}</li>}
                         {order.adminPrice && <li className="font-bold">Final Price: ${order.adminPrice}</li>}
                     </ul>
                 </div>
