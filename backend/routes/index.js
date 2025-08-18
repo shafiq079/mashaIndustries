@@ -20,6 +20,7 @@ const countAddToCartProduct = require('../controller/user/countAddToCartProduct'
 const addToCartViewProduct  = require('../controller/user/addToCartViewProduct');
 const updateAddToCartProduct = require('../controller/user/updateAddToCartProduct');
 const deleteAddToCartProduct = require('../controller/user/deleteAddToCartProduct');
+const addCustomToCartController = require('../controller/user/addCustomToCartController');
 const searchProduct = require('../controller/product/searchProduct');
 const filterProductController = require('../controller/product/filterProduct');
 const verifyEmailController = require('../controller/user/userVerificationController');
@@ -34,17 +35,23 @@ const tryonUpload = multer({ dest: 'uploads/tryon' });
 
 const customupload=require('../controller/custom/customcont');
 const getAllOrderController = require('../controller/order/allOrderController');
+const getCustomOrdersController = require('../controller/custom/getCustomOrders');
+const reviewCustomOrderController = require('../controller/custom/reviewCustomOrder');
+const getMyCustomOrdersController = require('../controller/custom/getMyCustomOrders');
 
 // User routes
 router.post("/signup", userSignUpController);
 router.post("/signin", userSignInController);
 router.get("/user-details", authToken, userDetailsController);
 router.get("/userLogout", userLogout);
+router.get("/my-custom-orders", authToken, getMyCustomOrdersController);
 
 // Admin panel routes
 router.get("/all-user", authToken, allUsers);
 router.post("/update-user", authToken, updateUser);
 router.get("/order-list", authToken, getAllOrderController);
+router.get("/get-custom-orders", authToken, getCustomOrdersController);
+router.post("/review-custom-order", authToken, reviewCustomOrderController);
 
 // Product routes
 router.post("/upload-product", authToken, UploadProductController);
@@ -58,6 +65,7 @@ router.post("/filter-product", filterProductController);
 
 // Cart routes
 router.post("/addtocart", authToken, addToCartController);
+router.post("/add-custom-to-cart", authToken, addCustomToCartController);
 router.get("/countAddToCartProduct", authToken, countAddToCartProduct);
 router.get("/view-card-product", authToken, addToCartViewProduct);
 router.post("/update-cart-product", authToken, updateAddToCartProduct);
@@ -72,7 +80,7 @@ router.post('/webhook',webhooks)
 router.get('/order',authToken, orderController)
 
 // Custom Order Uploads
-router.post("/custom",authToken, midleupload.array('files', 10), customupload.uploadfile);
+router.post("/custom",authToken, customupload.uploadfile);
 
 router.post("/aiupload", aiupload.single("aiimage"), uploadAiImage);
 //try on feature upload image

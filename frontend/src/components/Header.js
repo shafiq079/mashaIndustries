@@ -145,7 +145,20 @@ const Header = () => {
                     }}
                     className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-left w-full"
                   >
-                    Custom Order
+                    New Custom Order
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (user?._id) {
+                        navigate('/my-custom-orders');
+                      } else {
+                        toast.error('Please login!');
+                      }
+                    }}
+                    className="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap text-left w-full"
+                  >
+                    My Custom Orders
                   </button>
 
                 </div>
@@ -224,7 +237,10 @@ const Header = () => {
                       See Orders
                     </Link>
                     <Link to="/custom" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      Custom Order
+                      New Custom Order
+                    </Link>
+                    <Link to="/my-custom-orders" className="px-2 py-1 hover:bg-gray-100 rounded">
+                      My Custom Orders
                     </Link>
                     <Link to="/ai" className="px-2 py-1 hover:bg-gray-100 rounded">
                       AI Image Gen

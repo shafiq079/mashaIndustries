@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import SummaryApi from "../common";
+import { toast } from "react-toastify";
+import uploadImage from "../helpers/uploadImage";
 
 function Custom() {
   const [images, setImages] = useState([]);
@@ -9,7 +11,6 @@ function Custom() {
   const [productType, setProductType] = useState("");
   const [productSize, setSize] = useState("");
   const [material, setMaterial] = useState("");
-  const [totalPrice, setTotalPrice] = useState(0);
   const [message, setMessage] = useState("");
   const fileInputRef = useRef(null);
 
@@ -31,11 +32,6 @@ function Custom() {
     XL: 75,
   };
 
-  const materialPrices = {
-    Basic: 0,
-    Premium: 200,
-  };
-
   // Convert base64 data URL to File object
   const dataURLtoFile = (dataurl, filename) => {
     const arr = dataurl.split(",");
@@ -50,17 +46,6 @@ function Custom() {
   };
 
   useEffect(() => {
-    const calculatePrice = () => {
-      const basePrice = basePrices[productType] || 0;
-      const sizePrice = sizePrices[productSize] || 0;
-      const materialPrice = materialPrices[material] || 0;
-      const total = (basePrice + sizePrice + materialPrice) * amount;
-      setTotalPrice(total);
-    };
-    calculatePrice();
-  }, [productType, productSize, material, amount]);
-
-  useEffect(() => {
     // Load AI-generated image from localStorage
     const aiImageData = localStorage.getItem("aiGeneratedImage");
     if (aiImageData) {
@@ -73,42 +58,51 @@ function Custom() {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    setImages((prev) => [...prev, ...selectedFiles]);
+    setImages(selectedFiles);
     const previews = selectedFiles.map((file) => URL.createObjectURL(file));
-    setImagePreviews((prev) => [...prev, ...previews]);
+    setImagePreviews(previews);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (images.length === 0) {
-      alert("Please select at least one file to upload.");
+      toast.error("Please select at least one file to upload.");
       return;
     }
-    let formData = new FormData();
-    formData.append("amount", amount);
-    formData.append("productType", productType);
-    formData.append("productSize", productSize);
-    formData.append("material", material);
-    formData.append("totalPrice", totalPrice);
-    images.forEach((file) => {
-      formData.append("files", file);
-    });
+
     try {
-      const response = await axios.post(SummaryApi.custom.url, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const uploadResponse = await uploadImage(images[0]);
+
+      const payload = {
+        amount: amount,
+        productType: productType,
+        productSize: productSize,
+        material: material,
+        imageUrl: uploadResponse.secure_url,
+        originalName: images[0].name
+      };
+
+      const response = await axios.post(SummaryApi.custom.url, payload, {
+        headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
-      alert("Files uploaded successfully!");
-      setImages([]);
-      setImagePreviews([]);
-      setAmount(1);
-      setProductType("");
-      setSize("");
-      setMaterial("");
-      if (fileInputRef.current) fileInputRef.current.value = "";
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        setImages([]);
+        setImagePreviews([]);
+        setAmount(1);
+        setProductType("");
+        setSize("");
+        setMaterial("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      } else {
+        toast.error(response.data.message || "An unknown error occurred.");
+      }
     } catch (err) {
-      console.error("Error uploading files:", err);
-      setMessage("Error uploading files.");
+      toast.error("Error submitting request. Please try again.");
+      console.error("Error submitting request:", err);
+      setMessage("Error submitting request.");
     }
   };
 
@@ -126,7 +120,6 @@ function Custom() {
         <input
           ref={fileInputRef}
           type="file"
-          multiple
           onChange={handleFileChange}
           className="mb-4"
         />
@@ -175,12 +168,11 @@ function Custom() {
             className="mb-4 block w-full md:w-1/2 p-2 border border-gray-300 rounded-lg"
           />
         </div>
-        <p className="mb-4 font-bold">Total Price: ${totalPrice}</p>
         <button
           onClick={handleSubmit}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
         >
-          Submit
+          Submit for Review
         </button>
         {message && <p className="mt-4 text-red-500">{message}</p>}
       </div>

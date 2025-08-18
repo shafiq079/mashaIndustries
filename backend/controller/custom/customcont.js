@@ -1,29 +1,33 @@
 const File = require('../../models/customsch');
 
 exports.uploadfile = async (req, res) => {
+  try {
+    const { amount, productType, productSize, material, imageUrl, originalName } = req.body;
+    const userId = req.userId;
 
-  const { amount, productType, productSize, material, totalPrice } = req.body;
-  const userId = req.userId; 
-  if (req.files && req.files.length > 0) {
-    try {
-      const filesToSave = req.files.map(file => ({
-        originalName: file.originalname,
-        filePath: file.path,
-        quantity: amount,
-        productType: productType,
-        material: material,
-        productsize: productSize,
-        totalPrice: totalPrice,
-        id: userId, 
-      }));      
-
-      await File.insertMany(filesToSave);
-      return res.status(200).send('Files uploaded successfully');
-    } catch (err) {
-      console.error('Error saving files to database:', err);
-      return res.status(500).send('Error uploading files');
+    if (!imageUrl) {
+      return res.status(400).json({ message: 'Image URL is required.' });
     }
-  } else {
-    return res.status(400).send('No files uploaded');
+
+    const newCustomOrder = new File({
+      originalName: originalName,
+      filePath: imageUrl,
+      quantity: amount,
+      productType: productType,
+      material: material,
+      productsize: productSize,
+      userId: userId,
+    });
+
+    await newCustomOrder.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Your custom design has been submitted for review.'
+    });
+
+  } catch (err) {
+    console.error('Error saving custom order to database:', err);
+    return res.status(500).json({ message: 'Error submitting your order.' });
   }
 };

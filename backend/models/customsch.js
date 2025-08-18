@@ -1,14 +1,24 @@
 const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
-  originalName: { type: String },
-  filePath: { type: String},
-  quantity: { type: String },
-  productType: { type: String },
-  productsize: { type: String},
-  material: { type: String },
-  id: { type: String },
-  totalPrice:{type: String}
+  originalName: { type: String, required: true },
+  filePath: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  productType: { type: String, required: true },
+  productsize: { type: String, required: true },
+  material: { type: String, required: true },
+  userId: { type: String, required: true },
+  totalPrice: { type: Number }, // This is the user-calculated price, can be optional
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  },
+  adminPrice: {
+    type: Number
+  }
+}, {
+  timestamps: true
 });
 
 const File = mongoose.model('File', fileSchema);

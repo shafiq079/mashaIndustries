@@ -13,6 +13,7 @@ import AdminPanel from '../pages/AdminPanel';
 import AllUsers from '../pages/AllUsers';
 import AllProducts from '../pages/AllProducts';
 import AllOrders from '../pages/AllOrders';
+import AdminCustomOrders from '../pages/AdminCustomOrders';
 import CategoryProduct from '../pages/CategoryProduct';
 import ProductDetails from '../pages/ProductDetails';
 import Cart from '../pages/Cart';
@@ -21,6 +22,7 @@ import Success from '../pages/Success';
 import Cancel from '../pages/Cancel';
 import OrderPage from '../pages/OrderPage';
 import Custom from '../pages/custom';
+import MyCustomOrders from '../pages/MyCustomOrders';
 import VirtualTryOn from '../pages/VirtualTryOn';
 import Ai from '../pages/ai';
 import SummaryApi from '../common';
@@ -76,6 +78,10 @@ const router = createBrowserRouter([
         path: 'order',
         element: <ProtectedRoute><OrderPage /></ProtectedRoute>,
       },
+      {
+        path: 'my-custom-orders',
+        element: <ProtectedRoute><MyCustomOrders /></ProtectedRoute>,
+      },
       { path: 'login', element: <Login /> },
       { path: 'forgot-password', element: <ForgotPassowrd /> },
       { path: 'sign-up', element: <SignUp /> },
@@ -93,6 +99,7 @@ const router = createBrowserRouter([
           { path: 'all-users', element: <AllUsers /> },
           { path: 'all-products', element: <AllProducts /> },
           {path:'all-orders',element: <AllOrders />},
+          {path:'custom-orders',element: <AdminCustomOrders />},
         ],
       },
     ],

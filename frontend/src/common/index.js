@@ -102,6 +102,22 @@ const SummaryApi = {
     allOrder:{
         url: `${backendDomin}/api/order-list`,
         method: 'get'
+    },
+    allCustomOrders: {
+        url: `${backendDomin}/api/get-custom-orders`,
+        method: 'get'
+    },
+    reviewCustomOrder: {
+        url: `${backendDomin}/api/review-custom-order`,
+        method: 'post'
+    },
+    myCustomOrders: {
+        url: `${backendDomin}/api/my-custom-orders`,
+        method: 'get'
+    },
+    addCustomToCart: {
+        url: `${backendDomin}/api/add-custom-to-cart`,
+        method: 'post'
     }
 }
 
