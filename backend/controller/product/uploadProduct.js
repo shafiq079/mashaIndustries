@@ -1,5 +1,6 @@
 const uploadProductPermission = require("../../helpers/permission")
 const productModel = require("../../models/productModel")
+const cache = require('../../utils/cache');
 
 async function UploadProductController(req,res){
     try{
@@ -11,6 +12,10 @@ async function UploadProductController(req,res){
     
         const uploadProduct = new productModel(req.body)
         const saveProduct = await uploadProduct.save()
+
+        // Invalidate cache
+        cache.del('categoryProduct');
+        cache.del(`category-wise-${saveProduct.category}`);
 
         res.status(201).json({
             message : "Product upload successfully",
