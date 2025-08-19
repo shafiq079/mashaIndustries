@@ -20,23 +20,37 @@ const paymentController = async(request, response)=>{
                 userId: request.userId
             },
             line_items : cartItems.map((item,index)=>{
-                return {
-                    price_data : {
-                        currency : 'usd',
-                        product_data :{
-                            name : item.productId.productName,
-                            images : item.productId.productImage,
-                            metadata :{
-                                productId : item.productId._id
-                            }
+                if (item.isCustom) {
+                    return {
+                        price_data : {
+                            currency : 'usd',
+                            product_data :{
+                                name : `Custom ${item.customDetails.productType} (Qty: ${item.quantity})`,
+                                images : [item.customDetails.image]
+                            },
+                            unit_amount : item.customDetails.price * 100 // Total price in cents
                         },
-                        unit_amount : item.productId.sellingPrice * 100
-                    },
-                    adjustable_quantity : {
-                        enabled : true, 
-                        minimum : 1
-                    },
-                    quantity : item.quantity
+                        quantity : 1 // The price is for the whole batch, so quantity is 1
+                    }
+                } else {
+                    return {
+                        price_data : {
+                            currency : 'usd',
+                            product_data :{
+                                name : item.productId.productName,
+                                images : item.productId.productImage,
+                                metadata :{
+                                    productId : item.productId._id
+                                }
+                            },
+                            unit_amount : item.productId.sellingPrice * 100
+                        },
+                        adjustable_quantity : {
+                            enabled : true, 
+                            minimum : 1
+                        },
+                        quantity : item.quantity
+                    }
                 }
             }),
             success_url : `${process.env.FRONTEND_URL}/success`,

@@ -132,7 +132,11 @@ const Cart = () => {
     }
 
     const totalQty = data.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)
-    const totalPrice = data.reduce((preve, curr) => preve + (curr.quantity * curr?.productId?.sellingPrice), 0)
+    const totalPrice = data.reduce((preve, curr) => {
+        const itemTotal = curr.isCustom ? curr.customDetails.price : (curr.quantity * curr.productId.sellingPrice);
+        return preve + itemTotal;
+    }, 0)
+
     return (
         <div className='container mx-auto'>
 
@@ -158,10 +162,15 @@ const Cart = () => {
 
                         ) : (
                             data.map((product, index) => {
+                                const price = product.isCustom ? product.customDetails.price : product?.productId?.sellingPrice;
+                                const name = product.isCustom ? `Custom ${product.customDetails.productType}` : product?.productId?.productName;
+                                const category = product.isCustom ? "Custom Order" : product?.productId?.category;
+                                const image = product.isCustom ? product.customDetails.image : product?.productId?.productImage[0];
+
                                 return (
                                     <div key={product?._id + "Add To Cart Loading"} className='w-full bg-white h-32 my-2 border border-slate-300  rounded grid grid-cols-[128px,1fr]'>
                                         <div className='w-32 h-32 bg-slate-200'>
-                                            <img src={product?.productId?.productImage[0]} className='w-full h-full object-scale-down mix-blend-multiply' />
+                                            <img src={image} className='w-full h-full object-scale-down mix-blend-multiply' />
                                         </div>
                                         <div className='px-4 py-2 relative'>
                                             {/**delete product */}
@@ -169,16 +178,27 @@ const Cart = () => {
                                                 <MdDelete />
                                             </div>
 
-                                            <h2 className='text-lg lg:text-xl text-ellipsis line-clamp-1'>{product?.productId?.productName}</h2>
-                                            <p className='capitalize text-slate-500'>{product?.productId.category}</p>
+                                            <h2 className='text-lg lg:text-xl text-ellipsis line-clamp-1'>{name}</h2>
+                                            <p className='capitalize text-slate-500'>{category}</p>
                                             <div className='flex items-center justify-between'>
-                                                <p className='text-red-600 font-medium text-lg'>{displayINRCurrency(product?.productId?.sellingPrice)}</p>
-                                                <p className='text-slate-600 font-semibold text-lg'>{displayINRCurrency(product?.productId?.sellingPrice * product?.quantity)}</p>
+                                                <p className='text-red-600 font-medium text-lg'>{displayINRCurrency(price)}</p>
+                                                <p className='text-slate-600 font-semibold text-lg'>{displayINRCurrency(product.isCustom ? price : price * product.quantity)}</p>
                                             </div>
                                             <div className='flex items-center gap-3 mt-1'>
-                                                <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={() => decraseQty(product?._id, product?.quantity)}>-</button>
-                                                <span>{product?.quantity}</span>
-                                                <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={() => increaseQty(product?._id, product?.quantity)}>+</button>
+                                                {
+                                                    product.isCustom ? (
+                                                        <div className='flex items-center gap-3'>
+                                                            <p className='text-sm'>Qty:</p>
+                                                            <p className='font-semibold'>{product?.quantity}</p>
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={() => decraseQty(product?._id, product?.quantity)}>-</button>
+                                                            <span>{product?.quantity}</span>
+                                                            <button className='border border-red-600 text-red-600 hover:bg-red-600 hover:text-white w-6 h-6 flex justify-center items-center rounded ' onClick={() => increaseQty(product?._id, product?.quantity)}>+</button>
+                                                        </>
+                                                    )
+                                                }
                                             </div>
                                         </div>
                                     </div>
