@@ -11,8 +11,9 @@ function Custom() {
   const [productType, setProductType] = useState("");
   const [productSize, setSize] = useState("");
   const [material, setMaterial] = useState("");
-  const [description, setDescription] = useState(""); // New state
-  const [budget, setBudget] = useState(""); // New state
+  const [description, setDescription] = useState("");
+  const [budget, setBudget] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
   const fileInputRef = useRef(null);
 
@@ -71,19 +72,20 @@ function Custom() {
       toast.error("Please select at least one file to upload.");
       return;
     }
-
+    setIsLoading(true);
     try {
-      const uploadResponse = await uploadImage(images[0]);
+      const uploadPromises = images.map(image => uploadImage(image));
+      const uploadResponses = await Promise.all(uploadPromises);
 
       const payload = {
         amount: amount,
         productType: productType,
         productSize: productSize,
         material: material,
-        description: description, // New field
-        budget: budget, // New field
-        imageUrl: uploadResponse.secure_url,
-        originalName: images[0].name
+        description: description,
+        budget: budget,
+        imageUrls: uploadResponses.map(res => res.secure_url),
+        originalNames: images.map(img => img.name)
       };
 
       const response = await axios.post(SummaryApi.custom.url, payload, {
@@ -99,8 +101,8 @@ function Custom() {
         setProductType("");
         setSize("");
         setMaterial("");
-        setDescription(""); // Clear new field
-        setBudget(""); // Clear new field
+        setDescription("");
+        setBudget("");
         if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         toast.error(response.data.message || "An unknown error occurred.");
@@ -109,6 +111,8 @@ function Custom() {
       toast.error("Error submitting request. Please try again.");
       console.error("Error submitting request:", err);
       setMessage("Error submitting request.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -126,6 +130,7 @@ function Custom() {
         <input
           ref={fileInputRef}
           type="file"
+          multiple
           onChange={handleFileChange}
           className="mb-4"
         />
@@ -174,7 +179,6 @@ function Custom() {
             className="mb-4 block w-full md:w-1/2 p-2 border border-gray-300 rounded-lg"
           />
         </div>
-        {/* New fields */}
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -192,9 +196,10 @@ function Custom() {
         />
         <button
           onClick={handleSubmit}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+          disabled={isLoading}
         >
-          Submit for Review
+          {isLoading ? "Submitting..." : "Submit for Review"}
         </button>
         {message && <p className="mt-4 text-red-500">{message}</p>}
       </div>

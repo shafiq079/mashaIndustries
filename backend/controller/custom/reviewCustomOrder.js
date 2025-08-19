@@ -2,19 +2,19 @@ const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 const reviewCustomOrder = async (req, res) => {
     try {
-        const { orderId, status, adminPrice } = req.body;
+        const { orderId, adminPrice } = req.body;
 
-        if (!orderId || !status) {
-            throw new Error("Order ID and status are required.");
+        if (!orderId) {
+            throw new Error("Order ID is required.");
         }
 
-        if (status === 'approved' && (!adminPrice || adminPrice <= 0)) {
-            throw new Error("A valid price is required to approve an order.");
+        if (!adminPrice || adminPrice <= 0) {
+            throw new Error("A valid price is required to submit a quote.");
         }
 
         const updateData = {
-            status: status,
-            adminPrice: status === 'approved' ? adminPrice : undefined
+            status: 'quoted',
+            adminPrice: adminPrice
         };
 
         const updatedOrder = await CustomOrderRequestModel.findByIdAndUpdate(orderId, updateData, { new: true });
@@ -24,7 +24,7 @@ const reviewCustomOrder = async (req, res) => {
         }
 
         res.json({
-            message: `Order ${status} successfully.`,
+            message: `Price quote submitted successfully.`,
             data: updatedOrder,
             success: true,
             error: false

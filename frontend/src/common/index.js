@@ -118,6 +118,10 @@ const SummaryApi = {
     addCustomToCart: {
         url: `${backendDomin}/api/add-custom-to-cart`,
         method: 'post'
+    },
+    userReviewCustomOrder: {
+        url: `${backendDomin}/api/user-review-custom-order`,
+        method: 'post'
     }
 }
 

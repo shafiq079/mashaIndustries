@@ -2,23 +2,23 @@ const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 exports.uploadfile = async (req, res) => {
   try {
-    const { amount, productType, productSize, material, imageUrl, originalName, description, budget } = req.body;
+    const { amount, productType, productSize, material, imageUrls, originalNames, description, budget } = req.body;
     const userId = req.userId;
 
-    if (!imageUrl) {
-      return res.status(400).json({ message: 'Image URL is required.' });
+    if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
+      return res.status(400).json({ message: 'At least one image URL is required.' });
     }
 
     const newCustomOrder = new CustomOrderRequestModel({
-      originalName: originalName,
-      filePath: imageUrl,
+      originalNames: originalNames,
+      imageUrls: imageUrls,
       quantity: amount,
       productType: productType,
       material: material,
       productsize: productSize,
       userId: userId,
-      description: description, // New field
-      budget: budget, // New field
+      description: description,
+      budget: budget,
     });
 
     await newCustomOrder.save();

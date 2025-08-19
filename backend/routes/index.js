@@ -38,6 +38,7 @@ const getAllOrderController = require('../controller/order/allOrderController');
 const getCustomOrdersController = require('../controller/custom/getCustomOrders');
 const reviewCustomOrderController = require('../controller/custom/reviewCustomOrder');
 const getMyCustomOrdersController = require('../controller/custom/getMyCustomOrders');
+const userReviewController = require('../controller/custom/userReviewController');
 
 // User routes
 router.post("/signup", userSignUpController);
@@ -45,6 +46,7 @@ router.post("/signin", userSignInController);
 router.get("/user-details", authToken, userDetailsController);
 router.get("/userLogout", userLogout);
 router.get("/my-custom-orders", authToken, getMyCustomOrdersController);
+router.post("/user-review-custom-order", authToken, userReviewController);
 
 // Admin panel routes
 router.get("/all-user", authToken, allUsers);
