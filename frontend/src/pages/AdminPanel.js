@@ -33,7 +33,7 @@ const AdminPanel = () => {
             {user?.profilePic ? (
               <img
                 src={user?.profilePic}
-                className="w-20 h-20 rounded-full"
+                className="w-20 h-20 rounded-full object-cover"
                 alt={user?.name}
               />
             ) : (

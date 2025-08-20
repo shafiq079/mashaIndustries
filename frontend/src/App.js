@@ -1,20 +1,22 @@
 import './App.css';
-import 'react-quill/dist/quill.snow.css'; // Add this line to apply the default Quill theme
-import { Outlet, useLocation } from 'react-router-dom'; // Added useLocation
+import 'react-quill/dist/quill.snow.css';
+import { Outlet, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import SummaryApi from './common';
 import Context from './context';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
+import { fetchCartItems } from './store/cartSlice';
 
 function App() {
   const dispatch = useDispatch();
-  const [cartProductCount, setCartProductCount] = useState(0);
-  const location = useLocation(); // Added to get current route
+  const location = useLocation();
+  const cartItems = useSelector((state) => state.cart.items);
+  const user = useSelector((state) => state.user.user);
 
   const fetchUserDetails = async () => {
     try {
@@ -22,41 +24,27 @@ function App() {
         method: SummaryApi.current_user.method,
         credentials: 'include',
       });
-
       const dataApi = await dataResponse.json();
-
       if (dataApi.success) {
         dispatch(setUserDetails(dataApi.data));
       } else {
-        // If the session is invalid or token is expired, log the user out
         dispatch(setUserDetails(null));
       }
     } catch (error) {
-      // Handle network errors or other issues
       console.error("Error fetching user details:", error);
       dispatch(setUserDetails(null));
     }
   };
 
-  const fetchUserAddToCart = async () => {
-    const dataResponse = await fetch(SummaryApi.addToCartProductCount.url, {
-      method: SummaryApi.addToCartProductCount.method,
-      credentials: 'include',
-    });
-
-    const dataApi = await dataResponse.json();
-
-    setCartProductCount(dataApi?.data?.count);
-  };
-
   useEffect(() => {
-    /**user Details */
     fetchUserDetails();
-    /**user Details cart product */
-    fetchUserAddToCart();
-  }, []);
+    if (user?._id) {
+        dispatch(fetchCartItems());
+    }
+  }, [user?._id, dispatch]);
 
-  // Check if the current route is under /admin-panel
+  const cartProductCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
+
   const isAdminPanel = location.pathname.startsWith('/admin-panel');
   const isLoginPage = location.pathname.startsWith('/login');
   const isRegisterPage = location.pathname.startsWith('/sign-up');
@@ -65,9 +53,7 @@ function App() {
     <>
       <Context.Provider
         value={{
-          fetchUserDetails, // user detail fetch
-          cartProductCount, // current user add to cart product count
-          fetchUserAddToCart,
+          cartProductCount,
         }}
       >
         <ToastContainer position="top-center" />
