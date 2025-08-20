@@ -2,7 +2,7 @@ const CustomOrderRequestModel = require('../../models/CustomOrderRequest');
 
 exports.uploadfile = async (req, res) => {
   try {
-    const { amount, productType, productSize, material, imageUrls, originalNames, description, budget } = req.body;
+    const { designName, amount, productType, productSize, material, imageUrls, originalNames, description, budget } = req.body;
     const userId = req.userId;
 
     if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
@@ -10,6 +10,7 @@ exports.uploadfile = async (req, res) => {
     }
 
     const newCustomOrder = new CustomOrderRequestModel({
+      designName: designName,
       originalNames: originalNames,
       imageUrls: imageUrls,
       quantity: amount,

@@ -7,6 +7,7 @@ import uploadImage from "../helpers/uploadImage";
 function Custom() {
   const [images, setImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [designName, setDesignName] = useState(""); // New state
   const [amount, setAmount] = useState(1);
   const [productType, setProductType] = useState("");
   const [productSize, setSize] = useState("");
@@ -72,12 +73,17 @@ function Custom() {
       toast.error("Please select at least one file to upload.");
       return;
     }
+    if (!designName) {
+        toast.error("Please provide a name for your design.");
+        return;
+    }
     setIsLoading(true);
     try {
       const uploadPromises = images.map(image => uploadImage(image));
       const uploadResponses = await Promise.all(uploadPromises);
 
       const payload = {
+        designName: designName, // New field
         amount: amount,
         productType: productType,
         productSize: productSize,
@@ -97,6 +103,7 @@ function Custom() {
         toast.success(response.data.message);
         setImages([]);
         setImagePreviews([]);
+        setDesignName(""); // Clear new field
         setAmount(1);
         setProductType("");
         setSize("");
@@ -133,6 +140,13 @@ function Custom() {
           multiple
           onChange={handleFileChange}
           className="mb-4"
+        />
+        <input
+            type="text"
+            value={designName}
+            onChange={(e) => setDesignName(e.target.value)}
+            placeholder="Give your design a name (e.g., My Birthday Shirt)"
+            className="mb-4 block w-full p-2 border border-gray-300 rounded-lg"
         />
         <div className="w-full flex gap-4">
           <select

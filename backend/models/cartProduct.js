@@ -19,6 +19,7 @@ const addToCartSchema = new mongoose.Schema({
         default: false
     },
     customDetails: {
+        designName: { type: String },
         productType: { type: String },
         productsize: { type: String },
         material: { type: String },

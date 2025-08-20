@@ -25,10 +25,11 @@ const addCustomToCartController = async (req, res) => {
             quantity: customOrder.quantity,
             isCustom: true,
             customDetails: {
+                designName: customOrder.designName,
                 productType: customOrder.productType,
                 productsize: customOrder.productsize,
                 material: customOrder.material,
-                image: customOrder.filePath,
+                image: customOrder.imageUrls[0], // Use the first image for the cart
                 price: customOrder.adminPrice
             }
         });

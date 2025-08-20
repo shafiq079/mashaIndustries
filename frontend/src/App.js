@@ -17,15 +17,24 @@ function App() {
   const location = useLocation(); // Added to get current route
 
   const fetchUserDetails = async () => {
-    const dataResponse = await fetch(SummaryApi.current_user.url, {
-      method: SummaryApi.current_user.method,
-      credentials: 'include',
-    });
+    try {
+      const dataResponse = await fetch(SummaryApi.current_user.url, {
+        method: SummaryApi.current_user.method,
+        credentials: 'include',
+      });
 
-    const dataApi = await dataResponse.json();
+      const dataApi = await dataResponse.json();
 
-    if (dataApi.success) {
-      dispatch(setUserDetails(dataApi.data));
+      if (dataApi.success) {
+        dispatch(setUserDetails(dataApi.data));
+      } else {
+        // If the session is invalid or token is expired, log the user out
+        dispatch(setUserDetails(null));
+      }
+    } catch (error) {
+      // Handle network errors or other issues
+      console.error("Error fetching user details:", error);
+      dispatch(setUserDetails(null));
     }
   };
 

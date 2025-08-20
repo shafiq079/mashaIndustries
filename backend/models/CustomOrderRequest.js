@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const fileSchema = new mongoose.Schema({
+  designName: { type: String, required: true },
   originalNames: { type: [String], required: true },
   imageUrls: { type: [String], required: true },
   quantity: { type: Number, required: true },
