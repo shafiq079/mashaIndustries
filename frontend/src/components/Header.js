@@ -15,7 +15,7 @@ import Context from '../context';
 const Header = () => {
   const user = useSelector((state) => state?.user?.user);
   const dispatch = useDispatch();
-  const [menuDisplay, setMenuDisplay] = useState(false);
+  
   const [hoveredMenu, setHoveredMenu] = useState(null);
   const timeoutRef = useRef(null);
   const context = useContext(Context);
@@ -51,22 +51,9 @@ const Header = () => {
     navigate(value ? `/search?q=${value}` : '/search');
   };
 
-  const handleProfileClick = () => {
-    setMenuDisplay((prev) => !prev);
-  };
+  
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuDisplay && menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuDisplay(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [menuDisplay]);
+  
 
   const handleMouseEnter = (menu) => {
     clearTimeout(timeoutRef.current);
@@ -206,59 +193,26 @@ const Header = () => {
 
           <div className="relative flex justify-center" ref={menuRef}>
             {user?._id && (
-              <div
+              <Link
+                to="/profile"
                 className="text-3xl cursor-pointer relative flex justify-center items-center"
-                onClick={handleProfileClick}
               >
                 {user?.profilePic ? (
                   <img src={user?.profilePic} className="w-10 h-10 rounded-full" alt={user?.name} />
                 ) : (
                   <FaRegCircleUser />
                 )}
-              </div>
+              </Link>
             )}
 
-            {menuDisplay && (
-              <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-lg rounded w-52 z-50">
-                <nav className="flex flex-col gap-2">
-                  <p className="px-2 py-1 text-gray-700 font-medium">Profile</p>
-
-                  {/* Mobile-only menus */}
-                  <div className="flex flex-col md:hidden">
-                    {user?.role === ROLE.ADMIN && (
-                      <Link
-                        to={'/admin-panel/all-products'}
-                        className="px-2 py-1 hover:bg-gray-100 rounded"
-                      >
-                        Admin Panel
-                      </Link>
-                    )}
-                    <Link to="/order" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      See Orders
-                    </Link>
-                    <Link to="/custom" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      New Custom Order
-                    </Link>
-                    <Link to="/my-custom-orders" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      My Custom Orders
-                    </Link>
-                    <Link to="/ai" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      AI Image Gen
-                    </Link>
-                    <Link to="/virtual-try-on" className="px-2 py-1 hover:bg-gray-100 rounded">
-                      Virtual Try-On
-                    </Link>
-                  </div>
-                </nav>
-              </div>
-            )}
+            
           </div>
 
           {user?._id && (
             <Link to={'/cart'} className="text-2xl relative">
               <FaShoppingCart />
               <div className="bg-red-600 text-white w-5 h-5 rounded-full p-1 flex items-center justify-center absolute -top-2 -right-3">
-                <p className="text-sm">{context?.cartProductCount}</p>
+                <p className="text-sm">{context?.cartProductCount ?? 0}</p>
               </div>
             </Link>
           )}

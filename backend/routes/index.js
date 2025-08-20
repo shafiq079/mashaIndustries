@@ -9,6 +9,12 @@ const authToken = require('../middleware/authToken');
 const userLogout = require('../controller/user/userLogout');
 const allUsers = require('../controller/user/allUsers');
 const updateUser = require('../controller/user/updateUser');
+const updateMyProfileController = require('../controller/user/updateMyProfile');
+const changePasswordController = require('../controller/user/changePassword');
+const addAddressController = require('../controller/user/addAddress');
+const getAddressesController = require('../controller/user/getAddresses');
+const updateAddressController = require('../controller/user/updateAddress');
+const deleteAddressController = require('../controller/user/deleteAddress');
 const UploadProductController = require('../controller/product/uploadProduct');
 const getProductController = require('../controller/product/getProduct');
 const updateProductController = require('../controller/product/updateProduct');
@@ -47,6 +53,12 @@ router.get("/user-details", authToken, userDetailsController);
 router.get("/userLogout", userLogout);
 router.get("/my-custom-orders", authToken, getMyCustomOrdersController);
 router.post("/user-review-custom-order", authToken, userReviewController);
+router.post("/update-my-profile", authToken, updateMyProfileController);
+router.post("/change-password", authToken, changePasswordController);
+router.post("/add-address", authToken, addAddressController);
+router.get("/get-addresses", authToken, getAddressesController);
+router.post("/update-address", authToken, updateAddressController);
+router.post("/delete-address", authToken, deleteAddressController);
 
 // Admin panel routes
 router.get("/all-user", authToken, allUsers);

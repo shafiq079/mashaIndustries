@@ -23,6 +23,7 @@ import Cancel from '../pages/Cancel';
 import OrderPage from '../pages/OrderPage';
 import Custom from '../pages/custom';
 import MyCustomOrders from '../pages/MyCustomOrders';
+import Profile from '../pages/Profile';
 import VirtualTryOn from '../pages/VirtualTryOn';
 import Ai from '../pages/ai';
 import SummaryApi from '../common';
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: 'my-custom-orders',
         element: <ProtectedRoute><MyCustomOrders /></ProtectedRoute>,
+      },
+      {
+        path: 'profile',
+        element: <ProtectedRoute><Profile /></ProtectedRoute>,
       },
       { path: 'login', element: <Login /> },
       { path: 'forgot-password', element: <ForgotPassowrd /> },

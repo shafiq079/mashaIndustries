@@ -122,6 +122,30 @@ const SummaryApi = {
     userReviewCustomOrder: {
         url: `${backendDomin}/api/user-review-custom-order`,
         method: 'post'
+    },
+    updateMyProfile: {
+        url: `${backendDomin}/api/update-my-profile`,
+        method: 'post'
+    },
+    changePassword: {
+        url: `${backendDomin}/api/change-password`,
+        method: 'post'
+    },
+    addAddress: {
+        url: `${backendDomin}/api/add-address`,
+        method: 'post'
+    },
+    getAddresses: {
+        url: `${backendDomin}/api/get-addresses`,
+        method: 'get'
+    },
+    updateAddress: {
+        url: `${backendDomin}/api/update-address`,
+        method: 'post'
+    },
+    deleteAddress: {
+        url: `${backendDomin}/api/delete-address`,
+        method: 'post'
     }
 }
 
