@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import loginIcons from '../assest/signin.gif'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
-import imageTobase64 from '../helpers/imageTobase64';
+import uploadImage from '../helpers/uploadImage';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 
@@ -28,10 +28,10 @@ const SignUp = () => {
 
   const handleUploadPic = async (e) => {
     const file = e.target.files[0]
-    const imagePic = await imageTobase64(file)
+    const uploadResponse = await uploadImage(file)
     setData((prev) => ({
       ...prev,
-      profilePic: imagePic
+      profilePic: uploadResponse.secure_url
     }))
   }
 

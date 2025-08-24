@@ -7,7 +7,7 @@ const sendVerificationEmail = require('../../helpers/verification');
 
 async function userSignUpController(req, res) {
     try {
-        const { email, password, name } = req.body;
+        const { email, password, name, profilePic } = req.body;
 
         const user = await userModel.findOne({ email });
         if (user) {
@@ -39,6 +39,7 @@ async function userSignUpController(req, res) {
             email,
             role: "GENERAL",
             password: hashPassword,
+            profilePic: profilePic, // Add profilePic to payload
             isVerified: false, // Set initial verification status to false
             verificationToken
         };
