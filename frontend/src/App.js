@@ -5,7 +5,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import SummaryApi from './common';
 import Context from './context';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,7 +18,8 @@ function App() {
   const cartItems = useSelector((state) => state.cart.items);
   const user = useSelector((state) => state.user.user);
 
-  const fetchUserDetails = async () => {
+  // ---- Provide this via Context
+  const fetchUserDetails = useCallback(async () => {
     try {
       const dataResponse = await fetch(SummaryApi.current_user.url, {
         method: SummaryApi.current_user.method,
@@ -31,31 +32,52 @@ function App() {
         dispatch(setUserDetails(null));
       }
     } catch (error) {
-      console.error("Error fetching user details:", error);
+      console.error('Error fetching user details:', error);
       dispatch(setUserDetails(null));
     }
-  };
+  }, [dispatch]);
 
+  // ---- Provide this via Context (refresh cart after any change)
+  const fetchUserAddToCart = useCallback(async () => {
+    try {
+      await dispatch(fetchCartItems());
+    } catch (err) {
+      console.error('Error refreshing cart items:', err);
+    }
+  }, [dispatch]);
+
+  // Fetch user once on mount
   useEffect(() => {
     fetchUserDetails();
+  }, [fetchUserDetails]);
+
+  // When user is known, fetch cart items
+  useEffect(() => {
     if (user?._id) {
-        dispatch(fetchCartItems());
+      dispatch(fetchCartItems());
     }
   }, [user?._id, dispatch]);
 
-  const cartProductCount = cartItems.reduce((acc, curr) => acc + curr.quantity, 0);
+  const cartProductCount = Array.isArray(cartItems)
+    ? cartItems.reduce((acc, curr) => acc + (curr.quantity || 0), 0)
+    : 0;
 
   const isAdminPanel = location.pathname.startsWith('/admin-panel');
   const isLoginPage = location.pathname.startsWith('/login');
   const isRegisterPage = location.pathname.startsWith('/sign-up');
 
+  const contextValue = useMemo(
+    () => ({
+      cartProductCount,
+      fetchUserDetails,     // <— now available to children
+      fetchUserAddToCart,   // <— now available to children
+    }),
+    [cartProductCount, fetchUserDetails, fetchUserAddToCart]
+  );
+
   return (
     <>
-      <Context.Provider
-        value={{
-          cartProductCount,
-        }}
-      >
+      <Context.Provider value={contextValue}>
         <ToastContainer position="top-center" />
         <Header />
         <main className="min-h-[calc(100vh-120px)] pt-16">
