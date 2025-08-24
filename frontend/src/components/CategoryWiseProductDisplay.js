@@ -38,10 +38,10 @@ const CategroyWiseProductDisplay = ({ category, heading }) => {
         <div className="container">
             <h2 className="text-2xl font-semibold py-4">{heading}</h2>
 
-            <div className="flex flex-start flex-wrap justify-start gap-4 scrollbar-none transition-all">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {loading ? (
                     loadingList.map((_, index) => (
-                        <div key={index} className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow">
+                        <div key={index} className="bg-white rounded-sm shadow">
                             <div className="bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse"></div>
                             <div className="p-4 grid gap-3">
                                 <h2 className="font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 py-2 animate-pulse rounded-full bg-slate-200"></h2>
@@ -59,7 +59,7 @@ const CategroyWiseProductDisplay = ({ category, heading }) => {
                         <Link
                             key={product?._id}
                             to={"/product/" + product?._id}
-                            className="w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] bg-white rounded-sm shadow"
+                            className="bg-white rounded-sm shadow"
                             onClick={scrollTop} // Prevent scrolling to related product
                         >
                             <div className="bg-slate-200 overflow-hidden min-w-[280px] md:min-w-[145px] flex justify-center items-center">

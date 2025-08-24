@@ -110,7 +110,7 @@ const Header = () => {
           </nav>
 
           {/* User Icons - Desktop */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-6">
             {user?._id && (
                 <Link to={'/cart'} className="text-2xl relative">
                     <FaShoppingCart />
