@@ -9,9 +9,9 @@ import Context from '../context';
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({ email: '', password: '' });
+  const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate();
 
-  // Now provided by Context.Provider in App.js
   const { fetchUserDetails, fetchUserAddToCart } = useContext(Context);
 
   const handleOnChange = (e) => {
@@ -21,32 +21,35 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true
+    try {
+      const dataResponse = await fetch(SummaryApi.signIn.url, {
+        method: SummaryApi.signIn.method,
+        credentials: 'include',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-    const dataResponse = await fetch(SummaryApi.signIn.url, {
-      method: SummaryApi.signIn.method,
-      credentials: 'include',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+      const dataApi = await dataResponse.json();
 
-    const dataApi = await dataResponse.json();
+      if (dataApi.success) {
+        toast.success(dataApi.message);
 
-    if (dataApi.success) {
-      toast.success(dataApi.message);
+        if (typeof fetchUserDetails === 'function') {
+          await fetchUserDetails();
+        }
+        if (typeof fetchUserAddToCart === 'function') {
+          await fetchUserAddToCart();
+        }
 
-      // Ensure global state updates BEFORE navigating
-      if (typeof fetchUserDetails === 'function') {
-        await fetchUserDetails();
+        navigate('/');
+      } else {
+        toast.error(dataApi.message);
       }
-      if (typeof fetchUserAddToCart === 'function') {
-        await fetchUserAddToCart();
-      }
-
-      navigate('/');
-    }
-
-    if (dataApi.error) {
-      toast.error(dataApi.message);
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false
     }
   };
 
@@ -69,6 +72,7 @@ const Login = () => {
                   value={data.email}
                   onChange={handleOnChange}
                   className="w-full h-full outline-none bg-transparent"
+                  disabled={loading} // Disable input while loading
                 />
               </div>
             </div>
@@ -83,24 +87,28 @@ const Login = () => {
                   name="password"
                   onChange={handleOnChange}
                   className="w-full h-full outline-none bg-transparent"
+                  disabled={loading} // Disable input while loading
                 />
                 <div
                   className="cursor-pointer text-xl"
-                  onClick={() => setShowPassword((preve) => !preve)}
+                  onClick={() => !loading && setShowPassword((preve) => !preve)}
                 >
                   <span>{showPassword ? <FaEyeSlash /> : <FaEye />}</span>
                 </div>
               </div>
               <Link
                 to={'/forgot-password'}
-                className="block w-fit ml-auto hover:underline hover:text-red-600"
+                className={`block w-fit ml-auto hover:underline hover:text-red-600 ${loading ? 'pointer-events-none text-gray-400' : ''}`}
               >
                 Forgot password ?
               </Link>
             </div>
 
-            <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6">
-              Login
+            <button 
+              disabled={loading} // Disable button while loading
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6 disabled:bg-red-400 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
 
@@ -108,7 +116,7 @@ const Login = () => {
             Don't have account ?{' '}
             <Link
               to={'/sign-up'}
-              className=" text-red-600 hover:text-red-700 hover:underline"
+              className={`text-red-600 hover:text-red-700 hover:underline ${loading ? 'pointer-events-none text-gray-400' : ''}`}
             >
               Sign up
             </Link>

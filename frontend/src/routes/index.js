@@ -26,6 +26,9 @@ import MyCustomOrders from '../pages/MyCustomOrders';
 import Profile from '../pages/Profile';
 import VirtualTryOn from '../pages/VirtualTryOn';
 import Ai from '../pages/ai';
+import AboutUs from '../pages/AboutUs';
+import ContactUs from '../pages/ContactUs'; // Import ContactUs
+import NotFound from '../pages/NotFound';
 import SummaryApi from '../common';
 
 // ProtectedRoute with Redux and async fallback
@@ -63,6 +66,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: '', element: <Home /> },
+      { path: 'about', element: <AboutUs /> },
+      { path: 'contact', element: <ContactUs /> }, // Add ContactUs route
       {
         path: 'custom',
         element: <ProtectedRoute><Custom /></ProtectedRoute>,
@@ -107,6 +112,7 @@ const router = createBrowserRouter([
           {path:'custom-orders',element: <AdminCustomOrders />},
         ],
       },
+      { path: '*', element: <NotFound /> } // Add wildcard route
     ],
   },
 ]);

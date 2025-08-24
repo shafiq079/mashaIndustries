@@ -16,6 +16,7 @@ const SignUp = () => {
     confirmPassword: "",
     profilePic: "",
   })
+  const [loading, setLoading] = useState(false); // New loading state
   const navigate = useNavigate()
 
   const handleOnChange = (e) => {
@@ -48,19 +49,23 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true); // Set loading to true
 
     if (!validateEmail(data.email)) {
       toast.error("Please enter a valid email address.")
+      setLoading(false);
       return
     }
 
     if (!validatePassword(data.password)) {
       toast.error("Password must be at least 6 characters long and include uppercase, lowercase, number, and special character.")
+      setLoading(false);
       return
     }
 
     if (data.password !== data.confirmPassword) {
       toast.error("Passwords do not match.")
+      setLoading(false);
       return
     }
 
@@ -78,13 +83,13 @@ const SignUp = () => {
       if (dataApi.success) {
         toast.success(dataApi.message)
         navigate("/login")
-      }
-
-      if (dataApi.error) {
+      } else {
         toast.error(dataApi.message)
       }
     } catch (error) {
       toast.error("Something went wrong. Please try again later.")
+    } finally {
+      setLoading(false); // Set loading to false
     }
   }
 
@@ -102,7 +107,7 @@ const SignUp = () => {
                 <div className='text-xs bg-opacity-80 bg-slate-200 pb-4 pt-2 cursor-pointer text-center absolute bottom-0 w-full'>
                   Upload Photo
                 </div>
-                <input type='file' className='hidden' onChange={handleUploadPic} />
+                <input type='file' className='hidden' onChange={handleUploadPic} disabled={loading} />
               </label>
             </form>
           </div>
@@ -118,7 +123,8 @@ const SignUp = () => {
                   value={data.name}
                   onChange={handleOnChange}
                   required
-                  className='w-full h-full outline-none bg-transparent' />
+                  className='w-full h-full outline-none bg-transparent' 
+                  disabled={loading}/>
               </div>
             </div>
             <div className='grid'>
@@ -131,7 +137,8 @@ const SignUp = () => {
                   value={data.email}
                   onChange={handleOnChange}
                   required
-                  className='w-full h-full outline-none bg-transparent' />
+                  className='w-full h-full outline-none bg-transparent' 
+                  disabled={loading}/>
               </div>
             </div>
 
@@ -145,8 +152,9 @@ const SignUp = () => {
                   name='password'
                   onChange={handleOnChange}
                   required
-                  className='w-full h-full outline-none bg-transparent' />
-                <div className='cursor-pointer text-xl' onClick={() => setShowPassword((prev) => !prev)}>
+                  className='w-full h-full outline-none bg-transparent' 
+                  disabled={loading}/>
+                <div className='cursor-pointer text-xl' onClick={() => !loading && setShowPassword((prev) => !prev)}>
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </div>
               </div>
@@ -162,20 +170,21 @@ const SignUp = () => {
                   name='confirmPassword'
                   onChange={handleOnChange}
                   required
-                  className='w-full h-full outline-none bg-transparent' />
-                <div className='cursor-pointer text-xl' onClick={() => setShowConfirmPassword((prev) => !prev)}>
+                  className='w-full h-full outline-none bg-transparent' 
+                  disabled={loading}/>
+                <div className='cursor-pointer text-xl' onClick={() => !loading && setShowConfirmPassword((prev) => !prev)}>
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                 </div>
               </div>
             </div>
 
-            <button className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6'>
-              Sign Up
+            <button disabled={loading} className='bg-red-600 hover:bg-red-700 text-white px-6 py-2 w-full max-w-[150px] rounded-full hover:scale-110 transition-all mx-auto block mt-6 disabled:bg-red-400 disabled:cursor-not-allowed'>
+              {loading ? 'Signing up...' : 'Sign Up'}
             </button>
           </form>
 
           <p className='my-5'>
-            Already have an account? <Link to={"/login"} className='text-red-600 hover:text-red-700 hover:underline'>Login</Link>
+            Already have an account? <Link to={"/login"} className={`text-red-600 hover:text-red-700 hover:underline ${loading ? 'pointer-events-none text-gray-400' : ''}`}>Login</Link>
           </p>
         </div>
       </div>
