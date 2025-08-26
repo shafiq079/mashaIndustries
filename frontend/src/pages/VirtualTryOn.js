@@ -17,7 +17,7 @@ const VirtualTryOn = () => {
       const personImageResponse = await uploadImage(personImageFile);
       const garmentImageResponse = await uploadImage(garmentImageFile);
 
-      const response = await axios.post("http://localhost:8080/api/try-on", {
+      const response = await axios.post("https://masha-industries.onrender.com/api/try-on", {
         person_image_url: personImageResponse.url,
         garment_image_url: garmentImageResponse.url,
       });
