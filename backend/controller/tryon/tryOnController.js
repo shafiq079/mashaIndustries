@@ -23,7 +23,7 @@ const tryOnImage = async (req, res) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-API-KEY': 'sk_b3b1d46a16414328830c737f0a5a504f',
+                'X-API-KEY': 'sk_0dc2e5dd7fc7429e99de597e543aecc6',
             },
             data: data,
         };
